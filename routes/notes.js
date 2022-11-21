@@ -2,7 +2,7 @@ const notes = require('express').Router();
 const path = require('path');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid'); // Library to create unique IDs
-const { writeToFile, readAndAppend } = require('../helpers/Fs.js');
+const { writeToFile, readAndAppend } = require('../utils/Fs.js');
 
 // GET root route, display all notes in db
 notes.get('/', (req, res) => {
@@ -35,7 +35,7 @@ notes.delete('/:id', (req, res) => {
     let notes = JSON.parse(data);
 
     // filter to match every note with an ID other than the one to be deleted
-    updatedNotes = notes.filter((note) => note.id != id);
+    updatedNotes = notes.filter((note) => note.id != req.params.id);
 
     writeToFile(path.join(__dirname, '../db/db.json'), updatedNotes);
     res.status(200).json({message:"Note Deleted"});
